@@ -1,36 +1,52 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# ARCUS — Modular Desk Lamp
 
-## Getting Started
+Product launch landing for a fictional **modular desk lamp** hardware startup. Same craft language as AURALIS (scroll-scrubbed WebGL, Lenis, section snap) — different category: beam demos, finishes, shipping windows, waitlist.
 
-First, run the development server:
+**Live intent:** awareness → beam desire → finish choice → ship window → waitlist.
+
+**Repo (create as `arcus-lamp`):** GitHub Pages base path is `/arcus-lamp`  
+**Live (after Pages enable):** [https://achrafbennanizia.github.io/arcus-lamp/](https://achrafbennanizia.github.io/arcus-lamp/)
+
+## Stack
+- Next.js (App Router) + TypeScript + Tailwind CSS v4
+- React Three Fiber + Drei (procedural lamp model)
+- Motion for UI entrances
+- Lenis (desktop) + ~93% threshold section snap
+
+## Design
+- Brand-first hero: **ARCUS** as the dominant signal (headline + one line + CTAs)
+- Graphite void + cool mist + amber beam accent (not purple / cream-terracotta)
+- Display: Bricolage Grotesque · Body: Figtree
+- Studio mark: NODAL
+- 3D: [Poly Haven — Desk Lamp Arm 01](https://polyhaven.com/a/desk_lamp_arm_01) (CC0)
+
+## Sections
+1. Rise — brand + CTA
+2. Beam — Focus / Flood / Ambient (drives the live optic)
+3. Finishes — Graphite, Brass, Chalk, Ink (recolors the model)
+4. Ship — three batch windows
+5. Waitlist — founders seat form
+
+## Run
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Build
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm run build
+npm run build:pages
+npm run typecheck
+npm run lint
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## CI/CD
+- **CI** — lint + typecheck + Pages build on push/PR
+- **Deploy** — publishes `out/` to GitHub Pages on `main`
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Enable once: **Settings → Pages → Source: GitHub Actions**.  
+Create the GitHub repo as **`arcus-lamp`** so the base path matches.
+# ARCUS
