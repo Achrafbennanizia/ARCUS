@@ -18,7 +18,7 @@ Product launch landing for a fictional **modular desk lamp** hardware startup. S
 - Graphite void + cool mist + amber beam accent (not purple / cream-terracotta)
 - Display: Bricolage Grotesque · Body: Figtree
 - Studio mark: NODAL
-- 3D: [Poly Haven — Desk Lamp Arm 01](https://polyhaven.com/a/desk_lamp_arm_01) (CC0)
+- 3D: procedural parallelogram linkage (the Poly Haven arm pack in `public/models` is unused)
 
 ## Sections
 1. Rise — brand + CTA
