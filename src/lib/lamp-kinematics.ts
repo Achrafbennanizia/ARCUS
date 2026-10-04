@@ -201,7 +201,8 @@ export function lowestPoint(lower: number, upper: number, head: number) {
  * overshoot or the gravity sag cannot carry the shade through the top.
  */
 export function liftOffDesk(j: JointAngles, clearance: number = LINK.hardClearance): JointAngles {
-  let { lower, upper, head, yaw } = j;
+  let { lower, upper, head } = j;
+  const { yaw } = j;
   for (let i = 0; i < 10; i++) {
     if (lowestPoint(lower, upper, head) >= clearance) {
       return { lower, upper, head, yaw };
@@ -234,7 +235,7 @@ function optics(beam: BeamMode, onBeam: boolean) {
 export function resolvePose(section: SectionId, beam: BeamMode): LampPose {
   const spec = section === "beam" ? BEAM_TARGETS[beam] : SECTION_TARGETS[section] ?? SECTION_TARGETS.top;
   let y = spec.y;
-  let z = spec.z;
+  const z = spec.z;
   let solved = clampJoints({
     ...solveArm(y, z),
     head: spec.head,

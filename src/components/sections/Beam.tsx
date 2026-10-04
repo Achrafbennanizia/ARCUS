@@ -21,8 +21,8 @@ export function Beam() {
   /** Ignore scroll-sync briefly after a deliberate click */
   const ignoreIoUntil = useRef(0);
 
-  const selectThrow = (id: BeamMode) => {
-    ignoreIoUntil.current = performance.now() + 1200;
+  const selectThrow = (id: BeamMode, at: number) => {
+    ignoreIoUntil.current = at + 1200;
     setBeam(id);
     if (activeSection !== "beam") {
       smoothScrollToId("beam", 0.9);
@@ -95,7 +95,7 @@ export function Beam() {
 
           <LayoutGroup id="beam-throws">
             <div ref={listRef} className="mt-8 flex flex-col gap-2.5">
-              {BEAMS.map((mode, i) => {
+              {BEAMS.map((mode) => {
                 const active = beam === mode.id;
                 return (
                   <motion.button
@@ -105,7 +105,7 @@ export function Beam() {
                     initial={false}
                     whileTap={{ scale: 0.985 }}
                     transition={SELECT_SPRING}
-                    onClick={() => selectThrow(mode.id)}
+                    onClick={(event) => selectThrow(mode.id, event.timeStamp)}
                     className="beam-option relative isolate overflow-hidden rounded-2xl border px-5 py-3.5 text-left md:py-4"
                     style={{
                       borderColor: active
