@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import { Bricolage_Grotesque, Figtree } from "next/font/google";
 import "./globals.css";
 
@@ -26,7 +27,7 @@ export const metadata: Metadata = {
   },
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" className={`${bricolage.variable} ${figtree.variable} h-full`}>
       <body className="min-h-full antialiased">{children}</body>
