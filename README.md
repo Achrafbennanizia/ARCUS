@@ -4,8 +4,8 @@ Product launch landing for a fictional **modular desk lamp** hardware startup. S
 
 **Live intent:** awareness → beam desire → finish choice → ship window → waitlist.
 
-**Repo (create as `arcus-lamp`):** GitHub Pages base path is `/arcus-lamp`  
-**Live (after Pages enable):** [https://achrafbennanizia.github.io/arcus-lamp/](https://achrafbennanizia.github.io/arcus-lamp/)
+**Repo:** [ARCUS](https://github.com/Achrafbennanizia/ARCUS) — GitHub Pages base path is `/ARCUS`  
+**Live:** [https://achrafbennanizia.github.io/ARCUS/](https://achrafbennanizia.github.io/ARCUS/)
 
 ## Stack
 - Next.js (App Router) + TypeScript + Tailwind CSS v4
@@ -48,5 +48,5 @@ npm run lint
 - **Deploy** — publishes `out/` to GitHub Pages on `main`
 
 Enable once: **Settings → Pages → Source: GitHub Actions**.  
-Create the GitHub repo as **`arcus-lamp`** so the base path matches.
+The Pages site is served from the **`ARCUS`** repository, so asset URLs use the `/ARCUS` base path.
 # ARCUS

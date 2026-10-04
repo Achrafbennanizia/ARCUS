@@ -1,10 +1,10 @@
 import type { NextConfig } from "next";
 
-const isGithubPages =
-  process.env.GITHUB_PAGES === "true" ||
-  process.env.NEXT_PUBLIC_BASE_PATH === "/arcus-lamp";
-
-const basePath = isGithubPages ? "/arcus-lamp" : "";
+const repo = process.env.GITHUB_REPOSITORY?.split("/")[1];
+const pagesBuild =
+  process.env.GITHUB_PAGES === "true" || process.env.GITHUB_ACTIONS === "true";
+// Project Pages are served at /<repo>/, which is /ARCUS/ for this repository.
+const basePath = pagesBuild ? `/${repo || "ARCUS"}` : "";
 
 const nextConfig: NextConfig = {
   output: "export",

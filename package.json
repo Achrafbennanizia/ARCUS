@@ -8,7 +8,7 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "build:pages": "GITHUB_PAGES=true NEXT_PUBLIC_BASE_PATH=/arcus-lamp next build"
+    "build:pages": "GITHUB_PAGES=true next build"
   },
   "dependencies": {
     "@react-three/drei": "^10.7.9",
