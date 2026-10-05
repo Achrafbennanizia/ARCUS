@@ -152,10 +152,7 @@ export function LampMechanism({
   const spot = useRef<SpotLightType>(null);
   const spotTarget = useRef<THREE.Object3D>(null);
   const bulb = useRef<MeshStandardMaterial>(null);
-  const deskClip = useMemo(
-    () => new THREE.Plane(new THREE.Vector3(0, 1, 0), 0),
-    [],
-  );
+  const deskClip = useRef(new THREE.Plane(new THREE.Vector3(0, 1, 0), 0));
   const aim = useMemo(
     () => ({
       origin: new THREE.Vector3(),
@@ -246,8 +243,8 @@ export function LampMechanism({
       throwMesh.current.position.set(0, -0.5 * len, 0);
       const mat = throwMesh.current.material as THREE.MeshBasicMaterial;
       // Cut the cone on the desktop so it cannot continue through the base or below the landing.
-      deskClip.constant = -(groundY + 0.01);
-      mat.clippingPlanes = [deskClip];
+      deskClip.current.constant = -(groundY + 0.01);
+      mat.clippingPlanes = [deskClip.current];
       mat.clipShadows = true;
       mat.opacity = p.showBeam ? 0.16 + p.intensity * 0.1 : 0.1 + p.intensity * 0.04;
     }

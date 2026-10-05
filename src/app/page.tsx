@@ -24,7 +24,7 @@ export default function Home() {
             <div className="grain" aria-hidden />
             <Nav />
             <ScrollAssist />
-            <main className="relative z-10">
+            <main id="main" className="relative z-10">
               <Hero />
               <Beam />
               <Finishes />

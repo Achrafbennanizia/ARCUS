@@ -30,6 +30,7 @@
 html {
   background: var(--void);
   color: var(--mist);
+  color-scheme: dark;
   scroll-behavior: auto;
 }
 
@@ -320,10 +321,11 @@ button {
   background: transparent;
   padding: 0.75rem 0;
   color: var(--mist);
-  outline: none;
 }
 
-.field-input:focus {
+.field-input:focus-visible {
+  outline: 2px solid var(--beam);
+  outline-offset: 3px;
   border-bottom-color: var(--beam);
 }
 
@@ -336,7 +338,53 @@ button {
   background: rgba(22, 26, 34, 0.88);
 }
 
+select.field-input {
+  background-color: #161a22;
+  color: #f5f2ea;
+}
+
 select.field-input option {
   background: #161a22;
   color: #f5f2ea;
+}
+
+.display,
+h1,
+h2,
+h3 {
+  text-wrap: balance;
+}
+
+.skip-link {
+  position: absolute;
+  left: 1rem;
+  top: 0.75rem;
+  z-index: 80;
+  transform: translateY(-150%);
+  border-radius: 999px;
+  background: #f7f4ec;
+  color: #0b0d11;
+  padding: 0.6rem 1rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.skip-link:focus {
+  transform: none;
+  outline: 2px solid var(--beam);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }

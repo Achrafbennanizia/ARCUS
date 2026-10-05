@@ -1,11 +1,13 @@
 "use client";
 
+import { useState } from "react";
 import { motion } from "motion/react";
 import { CONTENT, SHIPPING } from "@/lib/content";
 import { useLampState } from "@/lib/lamp-state";
 
 export function Waitlist() {
   const { finish } = useLampState();
+  const [status, setStatus] = useState<"idle" | "done">("idle");
 
   return (
     <section
@@ -44,6 +46,9 @@ export function Waitlist() {
           className="rounded-[1.75rem] border border-line bg-[rgba(22,26,34,0.96)] p-6 shadow-[0_28px_80px_rgba(0,0,0,0.55)] md:p-8"
           onSubmit={(e) => {
             e.preventDefault();
+            const data = new FormData(e.currentTarget);
+            if (!String(data.get("email") || "").includes("@")) return;
+            setStatus("done");
           }}
         >
           <label className="block">
@@ -55,7 +60,7 @@ export function Waitlist() {
               name="name"
               autoComplete="name"
               className="field-input mt-1"
-              placeholder="Jordan Lee"
+              placeholder="Jordan Lee…"
             />
           </label>
           <label className="mt-6 block">
@@ -67,8 +72,9 @@ export function Waitlist() {
               type="email"
               name="email"
               autoComplete="email"
+              spellCheck={false}
               className="field-input mt-1"
-              placeholder="jordan@studio.com"
+              placeholder="jordan@studio.com…"
             />
           </label>
           <label className="mt-6 block">
@@ -90,6 +96,9 @@ export function Waitlist() {
           <button type="submit" className="btn-beam mt-8 w-full">
             {CONTENT.waitlistCta}
           </button>
+          <p className="mt-3 text-center text-sm text-mist" aria-live="polite">
+            {status === "done" ? "Request received. We’ll reply within 48 hours." : ""}
+          </p>
           <p className="mt-4 text-center text-xs leading-relaxed text-mist-muted">
             {CONTENT.waitlistNote}
           </p>

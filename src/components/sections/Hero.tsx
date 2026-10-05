@@ -18,7 +18,7 @@ export function Hero() {
             transition={{ duration: 0.9, ease: [0.23, 1, 0.32, 1], delay: 0.2 }}
             className="display copy-legible-title text-[clamp(3.2rem,8vw,6.5rem)]"
           >
-            {CONTENT.brand}
+            <span translate="no">{CONTENT.brand}</span>
           </motion.h1>
 
           <motion.p
@@ -36,20 +36,28 @@ export function Hero() {
             transition={{ duration: 0.75, ease: [0.23, 1, 0.32, 1], delay: 0.45 }}
             className="mt-9 flex flex-wrap items-center gap-4"
           >
-            <button
-              type="button"
+            <a
+              href="#waitlist"
               className="btn-beam"
-              onClick={() => smoothScrollToId("waitlist", 1.5)}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
+                smoothScrollToId("waitlist", 1.5);
+              }}
             >
               {CONTENT.heroCta}
-            </button>
-            <button
-              type="button"
+            </a>
+            <a
+              href="#beam"
               className="btn-ghost"
-              onClick={() => smoothScrollToId("beam", 1.35)}
+              onClick={(e) => {
+                if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey) return;
+                e.preventDefault();
+                smoothScrollToId("beam", 1.35);
+              }}
             >
               {CONTENT.heroSecondary}
-            </button>
+            </a>
           </motion.div>
         </div>
 

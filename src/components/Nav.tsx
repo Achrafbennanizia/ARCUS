@@ -13,6 +13,7 @@ const LINKS = [
 
 function go(id: string) {
   return (e: React.MouseEvent) => {
+    if (e.metaKey || e.ctrlKey || e.shiftKey || e.altKey || e.button !== 0) return;
     e.preventDefault();
     smoothScrollToId(id, 1.45);
   };
@@ -44,7 +45,7 @@ export function Nav() {
           className="nav-brand display text-sm tracking-[0.18em]"
           style={{ color: "#f7f4ec", textShadow: "0 2px 16px rgba(0,0,0,0.98)" }}
         >
-          {CONTENT.studio} / {CONTENT.brand}
+          <span translate="no">{CONTENT.studio} / {CONTENT.brand}</span>
         </a>
         <nav className="hidden items-center gap-8 text-sm font-medium md:flex">
           {LINKS.map((link) => (

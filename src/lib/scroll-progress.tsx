@@ -12,11 +12,15 @@ import {
 type ScrollProgressContextValue = {
   progress: number;
   reducedMotion: boolean;
+  paused: boolean;
+  togglePause: () => void;
 };
 
 const ScrollProgressContext = createContext<ScrollProgressContextValue>({
   progress: 0,
   reducedMotion: false,
+  paused: false,
+  togglePause: () => {},
 });
 
 export function useScrollProgress() {
@@ -25,11 +29,13 @@ export function useScrollProgress() {
 
 export function ScrollProgressProvider({ children }: { children: ReactNode }) {
   const [progress, setProgress] = useState(0);
-  const [reducedMotion, setReducedMotion] = useState(false);
+  const [systemReduced, setSystemReduced] = useState(false);
+  const [paused, setPaused] = useState(false);
+  const reducedMotion = systemReduced || paused;
 
   useEffect(() => {
     const media = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const syncPreference = () => setReducedMotion(media.matches);
+    const syncPreference = () => setSystemReduced(media.matches);
     syncPreference();
     media.addEventListener("change", syncPreference);
 
@@ -58,8 +64,13 @@ export function ScrollProgressProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value = useMemo(
-    () => ({ progress, reducedMotion }),
-    [progress, reducedMotion],
+    () => ({
+      progress,
+      reducedMotion,
+      paused,
+      togglePause: () => setPaused((value) => !value),
+    }),
+    [progress, reducedMotion, paused],
   );
 
   return (
