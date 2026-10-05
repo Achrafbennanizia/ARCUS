@@ -86,8 +86,9 @@ function maybeThresholdSnap() {
 }
 
 export function ScrollAssist() {
-  const reduced = useReducedMotion();
+  const systemReduced = useReducedMotion();
   const { paused, togglePause } = useScrollProgress();
+  const reduced = Boolean(systemReduced) || paused;
   const [active, setActive] = useState<SectionId>("top");
   const [hint, setHint] = useState(true);
   const progressMv = useMotionValue(0);

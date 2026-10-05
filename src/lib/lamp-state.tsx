@@ -3,6 +3,7 @@
 import {
   createContext,
   useContext,
+  useCallback,
   useEffect,
   useMemo,
   useState,
@@ -46,24 +47,28 @@ export function LampStateProvider({ children }: { children: ReactNode }) {
     const query = new URLSearchParams(window.location.search);
     const nextBeam = query.get("beam");
     const nextFinish = query.get("finish");
-    if (isBeam(nextBeam)) setBeamState(nextBeam);
+    // Static HTML cannot include the query string, so apply it after mount.
+    if (isBeam(nextBeam)) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- URL is the source of truth after hydration
+      setBeamState(nextBeam);
+    }
     if (isFinish(nextFinish)) setFinishState(nextFinish);
   }, []);
 
-  const setBeam = (next: BeamMode) => {
+  const setBeam = useCallback((next: BeamMode) => {
     setBeamState(next);
     writeQuery("beam", next);
-  };
+  }, []);
 
-  const setFinishId = (next: (typeof FINISHES)[number]["id"]) => {
+  const setFinishId = useCallback((next: (typeof FINISHES)[number]["id"]) => {
     setFinishState(next);
     writeQuery("finish", next);
-  };
+  }, []);
 
   const value = useMemo(() => {
     const finish = FINISHES.find((f) => f.id === finishId) ?? FINISHES[0];
     return { beam, finishId, setBeam, setFinishId, finish };
-  }, [beam, finishId]);
+  }, [beam, finishId, setBeam, setFinishId]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
