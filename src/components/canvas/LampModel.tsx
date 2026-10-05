@@ -200,7 +200,7 @@ export function LampModel({ foot }: { foot?: RefObject<Group | null> }) {
   return (
     <group ref={root} scale={INITIAL_POSE.scale}>
       {/* Bottom of the base disc. The desk locks to this, not the light cone. */}
-      <group ref={foot} position={[0, 0.004, 0]} />
+      <group ref={foot} position={[0, 0.004, 0]} userData={{ isFoot: true }} />
       <LampStand finish={finish} />
       <LampMechanism pose={rig} finish={finish} />
     </group>

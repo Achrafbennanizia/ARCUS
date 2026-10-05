@@ -89,7 +89,7 @@ function HeadTube({
         castShadow
         receiveShadow
       >
-        <cylinderGeometry args={[r, r * 0.86, len, 40]} />
+        <cylinderGeometry args={[r, r * 0.86, len, 40, 1, true]} />
         <meshPhysicalMaterial {...chromeShell(finish, map)} />
       </mesh>
       <mesh position={[0, 0, len * 0.62]}>
@@ -150,7 +150,21 @@ export function LampMechanism({
   const head = useRef<Group>(null);
   const throwMesh = useRef<Mesh>(null);
   const spot = useRef<SpotLightType>(null);
+  const spotTarget = useRef<THREE.Object3D>(null);
   const bulb = useRef<MeshStandardMaterial>(null);
+  const deskClip = useMemo(
+    () => new THREE.Plane(new THREE.Vector3(0, 1, 0), 0),
+    [],
+  );
+  const aim = useMemo(
+    () => ({
+      origin: new THREE.Vector3(),
+      dir: new THREE.Vector3(),
+      foot: new THREE.Vector3(),
+      hit: new THREE.Vector3(),
+    }),
+    [],
+  );
 
   const brush = useMemo(() => brushedShellMap(finish.hex), [finish.hex]);
 
@@ -175,21 +189,67 @@ export function LampMechanism({
     head.current.rotation.x = -p.head;
 
     const cone = Math.max(0.08, p.cone);
-    if (spot.current) {
+    head.current.updateWorldMatrix(true, false);
+    aim.origin.set(0, 0, LINK.shadeLen).applyMatrix4(head.current.matrixWorld);
+    aim.dir.set(0, 0, 1).transformDirection(head.current.matrixWorld);
+
+    let groundY = aim.origin.y - 0.8;
+    let root: THREE.Object3D | null = head.current;
+    while (root.parent) root = root.parent;
+    root.traverse((obj) => {
+      if (obj.userData.isFoot) groundY = obj.getWorldPosition(aim.foot).y;
+    });
+
+    // End the beam where it meets the desk. If the head aims up, keep a short cone in the air.
+    let len = 0.9;
+    if (aim.dir.y < -0.12) {
+      len = Math.min(2.6, Math.max(0.28, (groundY - aim.origin.y) / aim.dir.y));
+    }
+
+    // The base is a disc around the foot. Stop the beam before the cone enters it.
+    const baseRadius = 0.5;
+    const steps = 28;
+    for (let i = 1; i <= steps; i++) {
+      const t = (len * i) / steps;
+      const y = aim.origin.y + aim.dir.y * t;
+      if (y <= groundY + 0.015) break;
+      const radial = Math.hypot(
+        aim.origin.x + aim.dir.x * t - aim.foot.x,
+        aim.origin.z + aim.dir.z * t - aim.foot.z,
+      );
+      const coneRadius = Math.tan(cone) * t;
+      if (radial < baseRadius + coneRadius) {
+        len = Math.max(0.12, ((i - 1) / steps) * len);
+        break;
+      }
+    }
+
+    aim.hit.copy(aim.origin).addScaledVector(aim.dir, len);
+
+    if (spot.current && spotTarget.current) {
+      if (spotTarget.current.parent !== root) root.add(spotTarget.current);
+      spotTarget.current.position.copy(aim.hit);
+      spotTarget.current.updateMatrixWorld();
+      spot.current.target = spotTarget.current;
+      spot.current.layers.set(1);
       spot.current.angle = cone;
       spot.current.penumbra = p.penumbra;
-      spot.current.intensity = 20 + p.intensity * 46;
+      spot.current.intensity = 500 + p.intensity * 900;
+      spot.current.distance = 8;
     }
     if (bulb.current) {
       bulb.current.emissiveIntensity = 0.8 + p.emissive * 1.35;
     }
     if (throwMesh.current) {
-      const len = 0.42 + cone * 0.5;
       const radius = Math.tan(cone) * len;
       throwMesh.current.scale.set(radius, len, radius);
       throwMesh.current.position.set(0, -0.5 * len, 0);
       const mat = throwMesh.current.material as THREE.MeshBasicMaterial;
-      mat.opacity = p.showBeam ? 0.1 + p.intensity * 0.07 : 0.03 + p.intensity * 0.02;
+      // Cut the cone on the desktop so it cannot continue through the base or below the landing.
+      deskClip.constant = -(groundY + 0.01);
+      mat.clippingPlanes = [deskClip];
+      mat.clipShadows = true;
+      mat.opacity = p.showBeam ? 0.16 + p.intensity * 0.1 : 0.1 + p.intensity * 0.04;
     }
   });
 
@@ -210,21 +270,19 @@ export function LampMechanism({
                     <Knuckle finish={finish} />
                     <group ref={head} rotation={[-seed.head, 0, 0]}>
                       <HeadTube finish={finish} map={brush} bulb={bulb} />
+                      <object3D ref={spotTarget} />
                       <spotLight
                         ref={spot}
-                        position={[0, 0, LINK.shadeLen * 0.55]}
+                        position={[0, 0, LINK.shadeLen + 0.02]}
                         angle={seed.cone}
                         penumbra={seed.penumbra}
-                        intensity={40}
+                        intensity={180}
                         color="#ffe0a0"
                         castShadow
-                        distance={8}
-                        decay={1.45}
+                        decay={1.15}
                         shadow-mapSize={[1024, 1024]}
-                        shadow-bias={-0.0003}
-                      >
-                        <object3D attach="target" position={[0, 0, 1.8]} />
-                      </spotLight>
+                        shadow-bias={-0.0004}
+                      />
                       <group position={[0, 0, LINK.shadeLen]}>
                         <ThrowCone mesh={throwMesh} />
                       </group>

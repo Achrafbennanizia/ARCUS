@@ -60,7 +60,7 @@ export const BEAMS: Array<{
     id: "ambient",
     label: "Ambient",
     throw: "Soft fill",
-    detail: "Diffused up-bias for late sessions — less glare on screens.",
+    detail: "Soft downward fill for late sessions — less glare on screens.",
     angle: 0.72,
     intensity: 0.45,
   },

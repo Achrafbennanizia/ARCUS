@@ -1,7 +1,7 @@
 "use client";
 
 import { Canvas, useFrame, useThree } from "@react-three/fiber";
-import { Center, ContactShadows } from "@react-three/drei";
+import { Center } from "@react-three/drei";
 import { Suspense, useEffect, useMemo, useRef, type RefObject } from "react";
 import type { Group } from "three";
 import * as THREE from "three";
@@ -36,6 +36,7 @@ function CameraRig() {
     const damp = 1 - Math.exp(-(reducedMotion ? 16 : 4) * delta);
     camera.position.lerp(target.current, damp);
     camera.lookAt(LOOK);
+    camera.layers.enable(1);
   });
 
   return null;
@@ -48,9 +49,9 @@ function DeskSurface() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return null;
     const fade = ctx.createRadialGradient(128, 128, 20, 128, 128, 128);
-    fade.addColorStop(0, "rgba(255,255,255,0.95)");
-    fade.addColorStop(0.38, "rgba(255,255,255,0.5)");
-    fade.addColorStop(0.72, "rgba(255,255,255,0.1)");
+    fade.addColorStop(0, "rgba(255,255,255,1)");
+    fade.addColorStop(0.62, "rgba(255,255,255,0.9)");
+    fade.addColorStop(0.84, "rgba(255,255,255,0.4)");
     fade.addColorStop(1, "rgba(255,255,255,0)");
     ctx.fillStyle = fade;
     ctx.fillRect(0, 0, 256, 256);
@@ -66,10 +67,16 @@ function DeskSurface() {
   }, [alpha]);
 
   return (
-    <mesh rotation={[-Math.PI / 2, 0, 0]} receiveShadow>
+    <mesh
+      ref={(mesh) => {
+        if (mesh) mesh.layers.set(1);
+      }}
+      rotation={[-Math.PI / 2, 0, 0]}
+      receiveShadow
+    >
       <circleGeometry args={[2.5, 72]} />
       <meshStandardMaterial
-        color="#1c1814"
+        color="#14110e"
         roughness={0.92}
         metalness={0.03}
         alphaMap={alpha}
@@ -87,20 +94,12 @@ function Ground({ foot }: { foot: RefObject<Group | null> }) {
   useFrame(() => {
     if (!foot.current || !group.current) return;
     foot.current.getWorldPosition(point);
-    group.current.position.y = point.y;
+    group.current.position.copy(point);
   });
 
   return (
     <group ref={group}>
       <DeskSurface />
-      <ContactShadows
-        position={[0, -0.002, 0]}
-        opacity={0.55}
-        scale={6}
-        blur={2.2}
-        far={0.6}
-        color="#000000"
-      />
     </group>
   );
 }
@@ -128,7 +127,7 @@ function SceneContents() {
       />
       <spotLight
         position={[4.0, 4.4, 2.6]}
-        intensity={96 * dim}
+        intensity={28 * dim}
         angle={0.32}
         penumbra={0.28}
         color="#fffaf0"
@@ -162,7 +161,7 @@ function SceneContents() {
       />
       <pointLight
         position={[2.6, 1.4, 3.8]}
-        intensity={22 * dim}
+        intensity={8 * dim}
         distance={10}
         decay={2}
         color="#ffffff"
@@ -196,8 +195,10 @@ export function LampScene() {
         }}
         onCreated={({ gl, camera }) => {
           gl.setClearColor(0x000000, 0);
+          gl.localClippingEnabled = true;
           camera.position.set(4.9, MID_Y, 6.35);
           camera.lookAt(LOOK);
+          camera.layers.enable(1);
         }}
         shadows
       >

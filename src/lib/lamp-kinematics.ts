@@ -71,18 +71,18 @@ type HeadTarget = {
 };
 
 const SECTION_TARGETS: Record<SectionId, HeadTarget> = {
-  top: { y: 0.46, z: 0.86, head: -16 * DEG, yaw: -0.42, scale: 1 },
-  beam: { y: 0.22, z: 0.9, head: -24 * DEG, yaw: -0.2, scale: 1.02 },
-  finishes: { y: 0.4, z: 0.74, head: -10 * DEG, yaw: -1.05, scale: 1.06 },
-  shipping: { y: 0.78, z: 0.22, head: -8 * DEG, yaw: -0.15, scale: 0.9 },
-  waitlist: { y: 0.42, z: 0.82, head: -14 * DEG, yaw: -0.55, scale: 1.04 },
+  top: { y: 0.46, z: 0.86, head: -42 * DEG, yaw: 0.28, scale: 1 },
+  beam: { y: 0.22, z: 0.9, head: -24 * DEG, yaw: 0.2, scale: 1.02 },
+  finishes: { y: 0.4, z: 0.74, head: -36 * DEG, yaw: -0.15, scale: 1.06 },
+  shipping: { y: 0.55, z: 0.78, head: -28 * DEG, yaw: 0.1, scale: 0.9 },
+  waitlist: { y: 0.42, z: 0.82, head: -40 * DEG, yaw: 0.32, scale: 1.04 },
 };
 
 /** Beam modes place the head. Cone width comes from content. */
 const BEAM_TARGETS: Record<BeamMode, HeadTarget> = {
-  focus: { y: -0.06, z: 0.9, head: -46 * DEG, yaw: -0.22, scale: 1.02 },
-  flood: { y: 0.2, z: 1.02, head: -24 * DEG, yaw: 0.2, scale: 1.02 },
-  ambient: { y: 0.74, z: 0.42, head: 26 * DEG, yaw: -0.9, scale: 1.02 },
+  focus: { y: 0.38, z: 1.05, head: -34 * DEG, yaw: 0.22, scale: 1.02 },
+  flood: { y: 0.2, z: 1.02, head: -40 * DEG, yaw: 0.42, scale: 1.02 },
+  ambient: { y: 0.5, z: 0.96, head: -32 * DEG, yaw: 0.15, scale: 1.02 },
 };
 
 const PENUMBRA: Record<BeamMode, number> = {
